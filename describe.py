@@ -13,7 +13,7 @@ class Describe:
 
         datas = pd.read_csv(file_name)
         self.num_data = datas.select_dtypes(include=[float, int])
-        self.num_data.drop(columns=["Index"], inplace=True)
+        self.num_data.drop(columns=[INDEX_COLUMN], inplace=True)
 
     def describe(self):
         self.analyzed: dict[str, list] = {}
