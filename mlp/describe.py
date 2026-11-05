@@ -1,11 +1,9 @@
-#!/usr/bin/env python3
-
 import pandas as pd
 
-from config import *
+from .config import *
 
 
-from feature import Feature
+from .feature import Feature
 
 
 class Describe:
