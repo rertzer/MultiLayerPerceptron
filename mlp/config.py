@@ -1,5 +1,5 @@
 CSV_DIR = "csv/"
 TRAIN_FILE = "train.csv"
 TEST_FILE = "test.csv"
-DATA_FILE = "sample_test_1.csv"
-INDEX_COLUMN = ""
+DATA_FILE = "data.csv"
+INDEX_COLUMN = "Index"
