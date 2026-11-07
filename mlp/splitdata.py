@@ -30,13 +30,16 @@ class SplitData:
             index = random_indices[i]
             self.test_data.append(self.data.iloc[index])
 
-        self.train_data = pd.DataFrame(self.train_data)
-        self.test_data = pd.DataFrame(self.test_data)
+        self.dataFrameFormat()
+        self.dataFrameFormat()
+        assert isinstance(self.test_data, pd.DataFrame)
+        assert isinstance(self.train_data, pd.DataFrame)
 
         print("train len:", len(self.train_data))
         print("test len:", len(self.test_data))
         gd.save_data_csv(self.train_data, CSV_DIR + TRAIN_FILE)
         gd.save_data_csv(self.test_data, CSV_DIR + TEST_FILE)
+        print(self.test_data)
 
     def checkValidRatio(self, value: float) -> bool:
 
@@ -44,6 +47,47 @@ class SplitData:
             print("Error: Data ratio should be between 0 and 1")
             return False
         return True
+
+    def dataFrameFormat(self):
+        cols = [
+            "Index",
+            "Diagnosis",
+            "Radius mean",
+            "Texture mean",
+            "Perimeter mean",
+            "Area mean",
+            "Smoothness mean",
+            "Compactness mean",
+            "Concavity mean",
+            "Concave Points mean",
+            "Symmetry mean",
+            "Fractal Dimension mean",
+            "Radius SE",
+            "Texture SE",
+            "Perimeter SE",
+            "Area SE",
+            "Smoothness SE",
+            "Compactness SE",
+            "Concavity SE",
+            "Concave Points SE",
+            "Symmetry SE",
+            "Fractal Dimension SE",
+            "Radius Worst",
+            "Texture Worst",
+            "Perimeter Worst",
+            "Area Worst",
+            "Smoothness Worst",
+            "Compactness Worst",
+            "Concavity Worst",
+            "Concave Points Worst",
+            "Symmetry Worst",
+            "Fractal Dimension Worst",
+        ]
+
+        self.train_data = pd.DataFrame(self.train_data)
+        self.test_data = pd.DataFrame(self.test_data)
+        self.train_data.columns = cols
+        self.test_data.columns = cols
 
 
 if __name__ == "__main__":
