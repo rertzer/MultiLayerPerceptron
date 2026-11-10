@@ -1,23 +1,22 @@
 import pandas as pd
 
-from .config import *
-
+from .config import INDEX_COLUMN, CSV_DIR, TRAIN_FILE
 
 from .feature import Feature
 
 
 class Describe:
-    def __init__(self, file_name):
+    def __init__(self, file_name: str):
 
         datas = pd.read_csv(file_name)
         self.num_data = datas.select_dtypes(include=[float, int])
         self.num_data.drop(columns=[INDEX_COLUMN], inplace=True)
 
     def describe(self):
-        self.analyzed: dict[str, list] = {}
+        self.analyzed: dict[str, list[float]] = {}
 
         for col in self.num_data.columns:
-            feature = Feature(self.num_data[col])  # type: ignore[arg-type]
+            feature = Feature(self.num_data[col])
             feature.analyse()
             self.analyzed[col] = feature.getStats()
 

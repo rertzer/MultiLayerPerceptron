@@ -19,8 +19,8 @@ def get_data_csv(file_name: str):
     return df
 
 
-def is_valid_float(value):
-    return isinstance(value, (int, float)) and math.isfinite(value)
+def is_valid_float(value: float):
+    return isinstance(value, (float)) and math.isfinite(value)
 
 
 def save_data_csv(df: pd.DataFrame, file_name: str):

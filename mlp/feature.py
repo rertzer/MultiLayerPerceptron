@@ -4,10 +4,10 @@ from collections.abc import Callable
 
 
 class Feature:
-    def __init__(self, datas: pd.DataFrame):
+    def __init__(self, datas: pd.Series):
 
         self.values = datas.dropna()
-        self.values.sort_values(inplace=True)  # type: ignore[arg-type]
+        self.values.sort_values(inplace=True)
         self.values.reset_index(inplace=True, drop=True)
 
         self.count = math.nan
@@ -36,9 +36,9 @@ class Feature:
         self.q3 = self.quantile(0.75)
         self.computeKurtosisAndSkewness()
 
-    def cumulate(self, l: Callable[[float], float]) -> float:
+    def cumulate(self, func: Callable[[float], float]) -> float:
         total = 0
-        for x in (l(x) for x in self.values):
+        for x in (func(x) for x in self.values):
             total += x
         return total
 
@@ -46,9 +46,9 @@ class Feature:
         sum_quad = self.cumulate(lambda x: ((x - self.mean) / self.std) ** 4)
         sum_cub = self.cumulate(lambda x: ((x - self.mean) / self.std) ** 3)
         n = self.count
-        self.kurtosis = ((n * (n + 1) / (n - 1)) * sum_quad - 3 * (n - 1) ** 2) / (
-            (n - 2) * (n - 3)
-        )
+        self.kurtosis = (
+            (n * (n + 1) / (n - 1)) * sum_quad - 3 * (n - 1) ** 2
+        ) / ((n - 2) * (n - 3))
 
         self.skewness = n / ((n - 1) * (n - 2)) * sum_cub
 
@@ -59,14 +59,14 @@ class Feature:
         lower_index = int(index)
         upper_index = lower_index + 1
         if upper_index >= self.count:
-            return self.values.iloc[lower_index]  # type: ignore[arg-type]
+            return self.values.iloc[lower_index]
         weight = index - lower_index
         return (
             self.values.iloc[lower_index] * (1 - weight)
             + self.values.iloc[upper_index] * weight
         )
 
-    def getStats(self):
+    def getStats(self) -> list[float]:
         return [
             self.count,
             self.mean,

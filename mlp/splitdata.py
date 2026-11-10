@@ -1,6 +1,6 @@
 import random
 import pandas as pd
-from .config import *
+from .config import CSV_DIR, TEST_FILE, TRAIN_FILE, DATA_FILE
 from . import getdata as gd
 
 
@@ -21,19 +21,20 @@ class SplitData:
 
         random_indices = list(range(data_len))
         random.shuffle(random_indices)
-        self.train_data = []
-        self.test_data = []
+        self.train_data: pd.DataFrame = pd.DataFrame()
+        self.test_data: pd.DataFrame = pd.DataFrame()
         for i in range(train_len):
             index = random_indices[i]
-            self.train_data.append(self.data.iloc[index])
+            self.train_data = pd.concat(
+                [self.train_data, self.data.iloc[[index]]], ignore_index=True
+            )
         for i in range(train_len, data_len):
             index = random_indices[i]
-            self.test_data.append(self.data.iloc[index])
+            self.test_data = pd.concat(
+                [self.test_data, self.data.iloc[[index]]], ignore_index=True
+            )
 
         self.dataFrameFormat()
-        self.dataFrameFormat()
-        assert isinstance(self.test_data, pd.DataFrame)
-        assert isinstance(self.train_data, pd.DataFrame)
 
         print("train len:", len(self.train_data))
         print("test len:", len(self.test_data))
@@ -84,8 +85,6 @@ class SplitData:
             "Fractal Dimension Worst",
         ]
 
-        self.train_data = pd.DataFrame(self.train_data)
-        self.test_data = pd.DataFrame(self.test_data)
         self.train_data.columns = cols
         self.test_data.columns = cols
 
